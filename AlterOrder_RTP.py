@@ -113,7 +113,7 @@ def receiver(verbose, covert_channel):
       print('exception: {}: {}'.format(exc_type, exc_tb.tb_lineno))
 
 
-def sender(verbose, covert_channel, secret_message, diff=0):
+def sender(verbose, covert_channel, secret_message):
   # to control the packets
   old_packet = None
   exc_audios = queue.Queue()
@@ -272,7 +272,7 @@ def sender(verbose, covert_channel, secret_message, diff=0):
 # Print the argument parsing error
 def argv_error():
   print('ERROR: arguments:')
-  print('./AlterOrder_RTP.py [-v|-d] (decoder|encoder (ncc [% differs from real traffic]|cc [\'Message\'|-t file_name]))')
+  print('./AlterOrder_RTP.py [-v|-d] (decoder|encoder (ncc|cc [\'Message\'|-t file_name]))')
   sys.exit()
 
 
@@ -284,7 +284,6 @@ if __name__ == '__main__':
   if len(sys.argv) < 2 or len(sys.argv) > 5:
     argv_error()
 
-  diff = 0
   covert_channel = False
   secret_message = ''
 
@@ -299,10 +298,7 @@ if __name__ == '__main__':
 
   if sys.argv[2 + more] == 'cc':
     covert_channel = True
-  elif sys.argv[2 + more] == 'ncc':
-    if len(sys.argv) == (6 + more):
-      diff = int(sys.argv[5 + more])
-  else:
+  elif sys.argv[2 + more] != 'ncc':
     argv_error()
 
   if sys.argv[1 + more] == 'encoder':
